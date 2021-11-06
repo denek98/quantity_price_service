@@ -1,0 +1,19 @@
+{% extends 'suppliers/layouts.html' %}
+{% block body_container %}
+<button type="submit" class="cybr-btn" onclick="showLoaderOnClick('{% url 'generate_suppliers_file' %}','{% url 'index' %}')" >
+  Сформировать файл с поставщиками<span aria-hidden>_</span>
+  <span aria-hidden class="cybr-btn__glitch">Сформировать файл с поставщиками_</span>
+  <span aria-hidden class="cybr-btn__tag">Forest</span>
+</button>
+<button type="submit" class="cybr-btn" onclick="showLoaderOnClick('{% url 'generate_price_list' %}','{% url 'index' %}')">
+  Сформировать файл с остатками<span aria-hidden>_</span>
+  <span aria-hidden class="cybr-btn__glitch">Сформировать файл с остатками_</span>
+  <span aria-hidden class="cybr-btn__tag">Forest</span>
+</button>
+<button type="submit" class="cybr-btn" onclick="showLoaderOnClick('{% url 'initialize' %}', '{% url 'index' %}',confirm('Вы уверены?'))">
+  Пересчитать товарную базу<span aria-hidden>_</span>
+  <span aria-hidden class="cybr-btn__glitch">Пересчитать товарную базу_</span>
+  <span aria-hidden class="cybr-btn__tag">Forest</span>
+</button>
+
+{% endblock %}
