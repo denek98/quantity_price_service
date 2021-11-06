@@ -34,7 +34,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
-    'import_export',
     'suppliers.apps.SuppliersConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
