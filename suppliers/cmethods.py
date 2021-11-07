@@ -60,8 +60,7 @@ def process_files_to_dataframe(suppliers,current_df_product):
 # ---------------------------------------------------------------------------------
 # From multiple excel files to dataframe
 def process_files_to_pricelist(suppliers,current_df_product):
-    # df_list = parmap.map(parallel_process_files_to_pricelist,suppliers,current_df_product) # read multiple excel files in parallel
-    df_list = [parallel_process_files_to_pricelist(supplier_dict,current_df_product) for supplier_dict in suppliers]
+    df_list = parmap.map(parallel_process_files_to_pricelist,suppliers,current_df_product) # read multiple excel files in parallel
     df_merged = reduce(lambda  left,right: pd.merge(left,right,on=['sku'],how='outer'), df_list)
     return df_merged
 # ---------------------------------------------------------------------------------
@@ -153,38 +152,68 @@ def process_xml_file(supplier_dict,current_df_product):
         return df
 # ---------------------------------------------------------------------------------   
 def process_excel_file_to_pricelist(supplier_dict,current_df_product):
-    supplier_filepath = supplier_dict['price_list']
-    sku_column = int(supplier_dict['sku_colunmn_number'])-1
-    price_column = int(supplier_dict['price_colunmn_number'])-1
-    quantity_colunmn = int(supplier_dict['quantity_colunmn_number'])-1
-    quantity = f'{supplier_dict["supplier_name"]}_quantity' 
-    price = f'{supplier_dict["supplier_name"]}_price'
-    df = pd.read_excel(supplier_filepath,header = None)
-    df = df[[sku_column,quantity_colunmn,price_column]]
-    df.columns = ['sku',quantity,price]
-    df = df[df['sku'].isin(current_df_product['sku'])]
-    df[quantity] = df[quantity].replace({0:np.nan,'':np.nan,'0':np.nan})
-    df[price] = df[price].replace({0:np.nan,'':np.nan,'0':np.nan})
-    df.dropna(inplace = True)
-    return df
-
+    if supplier_dict['update_price']:
+        supplier_filepath = supplier_dict['price_list']
+        sku_column = int(supplier_dict['sku_colunmn_number'])-1
+        price_column = int(supplier_dict['price_colunmn_number'])-1
+        quantity_colunmn = int(supplier_dict['quantity_colunmn_number'])-1
+        quantity = f'{supplier_dict["supplier_name"]}_quantity' 
+        price = f'{supplier_dict["supplier_name"]}_price'
+        df = pd.read_excel(supplier_filepath,header = None)
+        df = df[[sku_column,quantity_colunmn,price_column]]
+        df.columns = ['sku',quantity,price]
+        df = df[df['sku'].isin(current_df_product['sku'])]
+        df[quantity] = df[quantity].replace({0:np.nan,'':np.nan,'0':np.nan})
+        df[price] = df[price].replace({0:np.nan,'':np.nan,'0':np.nan})
+        df.dropna(inplace = True)
+        return df
+    else:
+        supplier_filepath = supplier_dict['price_list']
+        sku_column = int(supplier_dict['sku_colunmn_number'])-1
+        quantity_colunmn = int(supplier_dict['quantity_colunmn_number'])-1
+        quantity = f'{supplier_dict["supplier_name"]}_quantity' 
+        price = f'{supplier_dict["supplier_name"]}_price'
+        df = pd.read_excel(supplier_filepath,header = None)
+        df = df[[sku_column,quantity_colunmn]]
+        df.columns = ['sku',quantity]
+        df = df[df['sku'].isin(current_df_product['sku'])]
+        df[quantity] = df[quantity].replace({0:np.nan,'':np.nan,'0':np.nan})
+        df.dropna(inplace = True)
+        df[price] = np.nan
+        return df
 # ---------------------------------------------------------------------------------   
 def process_xml_file_to_pricelist(supplier_dict,current_df_product):
-    supplier_filepath = supplier_dict['price_list']
-    offer_column = supplier_dict['offer_column_name']
-    sku_column = supplier_dict['sku_colunmn_number']
-    price_column = supplier_dict['price_colunmn_number']
-    quantity_colunmn = supplier_dict['quantity_colunmn_number']
-    quantity = f'{supplier_dict["supplier_name"]}_quantity' 
-    price = f'{supplier_dict["supplier_name"]}_price'
-    df = pd.read_xml(supplier_filepath,parser = 'etree',xpath=f".//{offer_column}")
-    df = df[[sku_column,quantity_colunmn,price_column]]
-    df.columns = ['sku',quantity,price]
-    df = df[df['sku'].isin(current_df_product['sku'])]
-    df[quantity] = df[quantity].replace({0:np.nan,'':np.nan,'0':np.nan})
-    df[price] = df[price].replace({0:np.nan,'':np.nan,'0':np.nan})
-    df.dropna(inplace = True)
-    return df
+    if supplier_dict['update_price']:
+        supplier_filepath = supplier_dict['price_list']
+        offer_column = supplier_dict['offer_column_name']
+        sku_column = supplier_dict['sku_colunmn_number']
+        price_column = supplier_dict['price_colunmn_number']
+        quantity_colunmn = supplier_dict['quantity_colunmn_number']
+        quantity = f'{supplier_dict["supplier_name"]}_quantity' 
+        price = f'{supplier_dict["supplier_name"]}_price'
+        df = pd.read_xml(supplier_filepath,parser = 'etree',xpath=f".//{offer_column}")
+        df = df[[sku_column,quantity_colunmn,price_column]]
+        df.columns = ['sku',quantity,price]
+        df = df[df['sku'].isin(current_df_product['sku'])]
+        df[quantity] = df[quantity].replace({0:np.nan,'':np.nan,'0':np.nan})
+        df[price] = df[price].replace({0:np.nan,'':np.nan,'0':np.nan})
+        df.dropna(inplace = True)
+        return df
+    else:
+        supplier_filepath = supplier_dict['price_list']
+        offer_column = supplier_dict['offer_column_name']
+        sku_column = supplier_dict['sku_colunmn_number']
+        quantity_colunmn = supplier_dict['quantity_colunmn_number']
+        quantity = f'{supplier_dict["supplier_name"]}_quantity' 
+        price = f'{supplier_dict["supplier_name"]}_price'
+        df = pd.read_xml(supplier_filepath,parser = 'etree',xpath=f".//{offer_column}")
+        df = df[[sku_column,quantity_colunmn]]
+        df.columns = ['sku',quantity]
+        df = df[df['sku'].isin(current_df_product['sku'])]
+        df[quantity] = df[quantity].replace({0:np.nan,'':np.nan,'0':np.nan})
+        df.dropna(inplace = True)
+        df[price] = np.nan
+        return df
 # ---------------------------------------------------------------------------------   
 def donwload_report(filepath,filename):
     path_to_file = os.path.realpath(filepath)
