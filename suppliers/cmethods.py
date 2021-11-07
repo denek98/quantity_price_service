@@ -109,7 +109,8 @@ def process_excel_file(supplier_dict,current_df_product):
         df = pd.read_excel(supplier_filepath,header = None)
         df = df[[sku_column,quantity_colunmn,price_column]]
         df.columns = ['sku','quantity','price']
-        df = df[df['sku'].astype(str).isin(current_df_product['sku'])]
+        df['sku'] = df['sku'].astype(str)
+        df = df[df['sku'].isin(current_df_product['sku'])]
         df['price'] = df['price'].replace(0,np.nan)
         df = parse_and_apply_column_specific(df,supplier_dict)
         return df
@@ -120,7 +121,8 @@ def process_excel_file(supplier_dict,current_df_product):
         df = pd.read_excel(supplier_filepath,header = None)
         df = df[[sku_column,quantity_colunmn]]
         df.columns = ['sku','quantity']
-        df = df[df['sku'].astype(str).isin(current_df_product['sku'])]
+        df['sku'] = df['sku'].astype(str)
+        df = df[df['sku'].isin(current_df_product['sku'])]
         df['price'] = np.nan
         df = parse_and_apply_column_specific(df,supplier_dict)
         return df
@@ -135,7 +137,8 @@ def process_xml_file(supplier_dict,current_df_product):
         df = pd.read_xml(supplier_filepath,parser = 'etree',xpath=f".//{offer_column}")
         df = df[[sku_column,quantity_colunmn,price_column]]
         df.columns = ['sku','quantity','price']
-        df = df[df['sku'].astype(str).isin(current_df_product['sku'])]
+        df['sku'] = df['sku'].astype(str)
+        df = df[df['sku'].isin(current_df_product['sku'])]
         df['price'] = df['price'].replace(0,np.nan)
         df = parse_and_apply_column_specific(df,supplier_dict) 
         return df
@@ -146,7 +149,8 @@ def process_xml_file(supplier_dict,current_df_product):
         df = pd.read_xml(supplier_filepath,parser = 'etree',xpath=f".//{offer_column}")
         df = df[[sku_column,quantity_colunmn]]
         df.columns = ['sku','quantity']
-        df = df[df['sku'].astype(str).isin(current_df_product['sku'])]
+        df['sku'] = df['sku'].astype(str)
+        df = df[df['sku'].isin(current_df_product['sku'])]
         df['price'] = np.nan
         df = parse_and_apply_column_specific(df,supplier_dict) 
         return df
@@ -162,7 +166,8 @@ def process_excel_file_to_pricelist(supplier_dict,current_df_product):
         df = pd.read_excel(supplier_filepath,header = None)
         df = df[[sku_column,quantity_colunmn,price_column]]
         df.columns = ['sku',quantity,price]
-        df = df[df['sku'].astype(str).isin(current_df_product['sku'])]
+        df['sku'] = df['sku'].astype(str)
+        df = df[df['sku'].isin(current_df_product['sku'])]
         df[quantity] = df[quantity].replace({0:np.nan,'':np.nan,'0':np.nan})
         df[price] = df[price].replace({0:np.nan,'':np.nan,'0':np.nan})
         df.dropna(inplace = True)
@@ -176,7 +181,8 @@ def process_excel_file_to_pricelist(supplier_dict,current_df_product):
         df = pd.read_excel(supplier_filepath,header = None)
         df = df[[sku_column,quantity_colunmn]]
         df.columns = ['sku',quantity]
-        df = df[df['sku'].astype(str).isin(current_df_product['sku'])]
+        df['sku'] = df['sku'].astype(str)
+        df = df[df['sku'].isin(current_df_product['sku'])]
         df[quantity] = df[quantity].replace({0:np.nan,'':np.nan,'0':np.nan})
         df.dropna(inplace = True)
         df[price] = np.nan
@@ -194,7 +200,8 @@ def process_xml_file_to_pricelist(supplier_dict,current_df_product):
         df = pd.read_xml(supplier_filepath,parser = 'etree',xpath=f".//{offer_column}")
         df = df[[sku_column,quantity_colunmn,price_column]]
         df.columns = ['sku',quantity,price]
-        df = df[df['sku'].astype(str).isin(current_df_product['sku'])]
+        df['sku'] = df['sku'].astype(str)
+        df = df[df['sku'].isin(current_df_product['sku'])]
         df[quantity] = df[quantity].replace({0:np.nan,'':np.nan,'0':np.nan})
         df[price] = df[price].replace({0:np.nan,'':np.nan,'0':np.nan})
         df.dropna(inplace = True)
@@ -209,7 +216,8 @@ def process_xml_file_to_pricelist(supplier_dict,current_df_product):
         df = pd.read_xml(supplier_filepath,parser = 'etree',xpath=f".//{offer_column}")
         df = df[[sku_column,quantity_colunmn]]
         df.columns = ['sku',quantity]
-        df = df[df['sku'].astype(str).isin(current_df_product['sku'])]
+        df['sku'] = df['sku'].astype(str)
+        df = df[df['sku'].isin(current_df_product['sku'])]
         df[quantity] = df[quantity].replace({0:np.nan,'':np.nan,'0':np.nan})
         df.dropna(inplace = True)
         df[price] = np.nan
