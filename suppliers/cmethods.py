@@ -127,7 +127,7 @@ def process_excel_file(supplier_dict,current_df_product):
 # ---------------------------------------------------------------------------------   
 def process_xml_file(supplier_dict,current_df_product):
     if supplier_dict['update_price']:
-        supplier_filepath = supplier_dict['price_list_link']
+        supplier_filepath = supplier_dict['price_list']
         offer_column = supplier_dict['offer_column_name']
         sku_column = supplier_dict['sku_colunmn_number']
         price_column = supplier_dict['price_colunmn_number']
@@ -140,7 +140,7 @@ def process_xml_file(supplier_dict,current_df_product):
         df = parse_and_apply_column_specific(df,supplier_dict) 
         return df
     else:
-        supplier_filepath = supplier_dict['price_list_link']
+        supplier_filepath = supplier_dict['price_list']
         sku_column = supplier_dict['sku_colunmn_number']
         quantity_colunmn = supplier_dict['quantity_colunmn_number']
         df = pd.read_xml(supplier_filepath,parser = 'etree',xpath=f".//{offer_column}")
@@ -169,7 +169,7 @@ def process_excel_file_to_pricelist(supplier_dict,current_df_product):
 
 # ---------------------------------------------------------------------------------   
 def process_xml_file_to_pricelist(supplier_dict,current_df_product):
-    supplier_filepath = supplier_dict['price_list_link']
+    supplier_filepath = supplier_dict['price_list']
     offer_column = supplier_dict['offer_column_name']
     sku_column = supplier_dict['sku_colunmn_number']
     price_column = supplier_dict['price_colunmn_number']
