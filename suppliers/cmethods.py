@@ -43,6 +43,7 @@ def update_product_table_model_from_dframe(dframe,current_df_product):
     dframe['price'] = pd.to_numeric(dframe['price'], errors='coerce')
     dframe = dframe.groupby('sku',as_index = False).agg({'quantity':'sum','price':'min'})
     current_df_product = pd.concat([current_df_product,dframe[['sku','quantity','price']]]).groupby('sku',as_index = False).agg({'quantity':'sum','price':get_not_nan_values,'name':get_not_nan_values})
+    current_df_product['quantity'] = current_df_product.quantity.apply(lambda x: 1 if x != 0 else x)
     return current_df_product[['sku','name','quantity','price']]
 # ---------------------------------------------------------------------------------    
 def update_suppliers_pricelist_model_from_dframe(dframe,current_df_product):
