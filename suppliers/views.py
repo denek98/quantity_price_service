@@ -37,7 +37,7 @@ def generate_suppliers_file(request):
     current_df_product = cmethods.get_current_df_product(models.ProductTable._meta.db_table) # get current products from ProductTable model
     dframe = cmethods.process_files_to_pricelist(models.Supplier.objects.values(),current_df_product) # get dataframe with all supliers 
     resulted_df_product = cmethods.update_suppliers_pricelist_model_from_dframe(dframe,current_df_product)
-    resulted_df_product.to_sql('suppliers_price_list',con = engine,if_exists = 'replace',index = False)
+    resulted_df_product.to_sql(models.ProductTable._meta.db_table,con = engine,if_exists = 'replace',index = False)
     resulted_df_product.to_excel(filepath,index = False)
     return cmethods.donwload_report(filepath,report_name)
 
