@@ -54,15 +54,13 @@ def update_suppliers_pricelist_model_from_dframe(dframe,current_df_product):
 # ---------------------------------------------------------------------------------  
 # From multiple excel files to dataframe
 def process_files_to_dataframe(suppliers,current_df_product):
-    # df_list = parmap.map(parallel_process_files_to_dataframe,suppliers,current_df_product) # read multiple excel files in parallel
-    df_list = [parallel_process_files_to_dataframe(supplier_dict,current_df_product) for supplier_dict in suppliers]
+    df_list = parmap.map(parallel_process_files_to_dataframe,suppliers,current_df_product) # read multiple excel files in parallel
     dframe = pd.concat(df_list,ignore_index = True) 
     return dframe
 # ---------------------------------------------------------------------------------
 # From multiple excel files to dataframe
 def process_files_to_pricelist(suppliers,current_df_product):
-    # df_list = parmap.map(parallel_process_files_to_pricelist,suppliers,current_df_product) # read multiple excel files in parallel
-    df_list = [parallel_process_files_to_pricelist(supplier_dict,current_df_product) for supplier_dict in suppliers]
+    df_list = parmap.map(parallel_process_files_to_pricelist,suppliers,current_df_product) # read multiple excel files in parallel
     df_merged = reduce(lambda  left,right: pd.merge(left,right,on=['sku'],how='outer'), df_list)
     return df_merged
 # ---------------------------------------------------------------------------------
