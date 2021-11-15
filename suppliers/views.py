@@ -13,6 +13,7 @@ def initialize(request):
     df = pd.read_excel(product_link_path,names = ['sku','name'],header = None) # provide Excel file with sku on the first position and name on the second
     df['quantity'] = 0 # setting default values
     df['price'] = 0 # setting default values
+    df['price_old'] = 0 # setting default values
     df.to_sql(models.ProductTable._meta.db_table,con = engine,if_exists = 'replace',index = False)
     return redirect('index')
 # --------------------------------------------------------------------------------------------------
